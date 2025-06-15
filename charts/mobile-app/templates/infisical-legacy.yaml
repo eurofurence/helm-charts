@@ -1,10 +1,10 @@
-{{- if and .Values.infisical.enabled (not .Values.infisical.legacy) }}
+{{- if and .Values.infisical.enabled .Values.infisical.legacy }}
 {{- range $key, $value := .Values.deployments }}
 {{- $deploymentName := ( include "ef-mobile-app.deploymentName" ( list $ $key ) ) }}
 apiVersion: secrets.infisical.com/v1alpha1
 kind: InfisicalSecret
 metadata:
-  name: {{ printf "%s-infisical" $deploymentName | quote }}
+  name: {{ printf "%s-infisical-secret" $deploymentName | quote }}
   namespace: {{ $.Release.Namespace }}
 spec:
   authentication:
@@ -15,16 +15,31 @@ spec:
   {{- if $.Values.infisical.resyncInterval }}
   resyncInterval: {{ $.Values.infisical.resyncInterval }}
   {{- end }}
-  managedKubeSecretReferences:
-    - secretName: {{ printf "%s-backend-config" $deploymentName | quote }}
-      secretNamespace: {{ $.Release.Namespace }}
-      secretType: Opaque
-      creationPolicy: Owner
-      template:
-        includeAllSecrets: false
-        data:
-          appsettings.json: {{ printf "{{ .%s_APPSETTINGS_JSON.Value }}" (upper $key) | quote }}
-          firebase.json: {{ printf "{{ .%s_FIREBASE_JSON.Value }}" (upper $key) | quote }}
+  managedSecretReference:
+    creationPolicy: Owner
+    secretName: {{ printf "%s-backend-config" $deploymentName | quote }}
+    secretNamespace: {{ $.Release.Namespace }}
+    secretType: Opaque
+    template:
+      includeAllSecrets: false
+      data:
+        appsettings.json: {{ printf "{{ .%s_APPSETTINGS_JSON.Value }}" (upper $key) | quote }}
+        firebase.json: {{ printf "{{ .%s_FIREBASE_JSON.Value }}" (upper $key) | quote }}
+---
+apiVersion: secrets.infisical.com/v1alpha1
+kind: InfisicalSecret
+metadata:
+  name: {{ printf "%s-infisical-config" $deploymentName | quote }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  authentication:
+    {{- toYaml $.Values.infisical.authentication | nindent 4 }}
+  {{- if $.Values.infisical.hostAPI }}
+  hostAPI: {{ $.Values.infisical.hostAPI }}
+  {{- end }}
+  {{- if $.Values.infisical.resyncInterval }}
+  resyncInterval: {{ $.Values.infisical.resyncInterval }}
+  {{- end }}
   managedKubeConfigMapReferences:
     - configMapName: {{ printf "%s-backoffice-config" $deploymentName | quote }}
       configMapNamespace: {{ $.Release.Namespace }}

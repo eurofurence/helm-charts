@@ -28,6 +28,7 @@ ingress:
 ##   (see https://github.com/eurofurence/ef-app_backend-dotnet-core/blob/main/src/Eurofurence.App.Server.Web/firebase.sample.json)
 infisical:
   enabled: true
+  legacy: false
   ## see https://infisical.com/docs/integrations/platforms/kubernetes/infisical-secret-crd#authentication-methods
   authentication:
     ## see https://infisical.com/docs/documentation/platform/identities/universal-auth
