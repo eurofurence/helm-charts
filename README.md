@@ -2,6 +2,10 @@
 
 Simplify deployment of various Eurofurence services on Kubernetes by using the Helm charts in this repository!
 
+## Available charts
+
+* [`mobile-app`](./charts/mobile-app/) – Used to run the backend of the [Eurofurence Mobile App](https://app.eurofurence.org)!
+
 ## Usage
 
 [Helm](https://helm.sh) must be installed to use the charts.
