@@ -4,7 +4,7 @@
 apiVersion: secrets.infisical.com/v1alpha1
 kind: InfisicalSecret
 metadata:
-  name: {{ printf "%s-infisical-secret" $deploymentName | quote }}
+  name: {{ printf "%s-infisical" $deploymentName | quote }}
   namespace: {{ $.Release.Namespace }}
 spec:
   authentication:
@@ -25,21 +25,6 @@ spec:
       data:
         appsettings.json: {{ printf "{{ .%s_APPSETTINGS_JSON.Value }}" (upper $key) | quote }}
         firebase.json: {{ printf "{{ .%s_FIREBASE_JSON.Value }}" (upper $key) | quote }}
----
-apiVersion: secrets.infisical.com/v1alpha1
-kind: InfisicalSecret
-metadata:
-  name: {{ printf "%s-infisical-config" $deploymentName | quote }}
-  namespace: {{ $.Release.Namespace }}
-spec:
-  authentication:
-    {{- toYaml $.Values.infisical.authentication | nindent 4 }}
-  {{- if $.Values.infisical.hostAPI }}
-  hostAPI: {{ $.Values.infisical.hostAPI }}
-  {{- end }}
-  {{- if $.Values.infisical.resyncInterval }}
-  resyncInterval: {{ $.Values.infisical.resyncInterval }}
-  {{- end }}
   managedKubeConfigMapReferences:
     - configMapName: {{ printf "%s-backoffice-config" $deploymentName | quote }}
       configMapNamespace: {{ $.Release.Namespace }}
