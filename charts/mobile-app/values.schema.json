@@ -43,6 +43,12 @@
 				},
 				"authentication": {
 					"type": "object"
+				},
+				"hostAPI": {
+					"type": "string"
+				},
+				"resyncInterval": {
+					"type": "integer"
 				}
 			},
 			"required": [

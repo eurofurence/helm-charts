@@ -9,6 +9,12 @@ metadata:
 spec:
   authentication:
     {{- toYaml $.Values.infisical.authentication | nindent 4 }}
+  {{- if .Values.infisical.hostAPI }}
+  hostAPI: {{ $.Values.infisical.hostAPI }}
+  {{- end}}
+  {{- if .Values.infisical.resyncInterval }}
+  resyncInterval: {{ $.Values.infisical.resyncInterval }}
+  {{- end}}
   managedKubeSecretReferences:
     - secretName: {{ printf "%s-backend-config" $deploymentName | quote }}
       secretNamespace: {{ $.Release.Namespace }}

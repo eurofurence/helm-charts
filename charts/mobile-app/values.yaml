@@ -39,6 +39,12 @@ infisical:
       credentialsRef:
         secretName: universal-auth-credentials
         secretNamespace: default
+  ## Infisical instance to fetch secrets from
+  ## see https://infisical.com/docs/integrations/platforms/kubernetes/infisical-secret-crd#hostapi
+  # hostApi: "http://<backend-svc-name>.<namespace>.svc.cluster.local:4000/api"
+  ## Time in seconds between each secret re-sync from Infisical.
+  ## see https://infisical.com/docs/integrations/platforms/kubernetes/infisical-secret-crd#resyncinterval
+  # resyncInterval: 60
 
 ## Identifier of the deployment (e.g. "ef00") which should serve the paths directly
 ## accessible from the `ingress.host` root like `/.well-known` and the app homepage.
