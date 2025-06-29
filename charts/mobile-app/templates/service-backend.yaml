@@ -9,7 +9,8 @@ metadata:
     app: {{ $.Release.Name }}
 spec:
   selector:
-    app: {{ $deploymentName | quote }}
+    app: {{ $.Release.Name }}
+    deployment: {{ $deploymentName | quote }}
   ports:
     - port: 30001
       targetPort: http-backend
