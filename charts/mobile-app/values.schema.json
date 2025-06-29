@@ -41,9 +41,6 @@
 				"enabled": {
 					"type": "boolean"
 				},
-				"legacy": {
-					"type": "boolean"
-				},
 				"authentication": {
 					"type": "object"
 				},

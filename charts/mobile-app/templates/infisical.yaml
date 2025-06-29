@@ -1,4 +1,4 @@
-{{- if and .Values.infisical.enabled (not .Values.infisical.legacy) }}
+{{- if .Values.infisical.enabled }}
 {{- range $key, $value := .Values.deployments }}
 {{- $deploymentName := ( include "ef-mobile-app.deploymentName" ( list $ $key ) ) }}
 apiVersion: secrets.infisical.com/v1alpha1
