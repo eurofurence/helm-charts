@@ -1,5 +1,15 @@
 apiVersion: v1
 entries:
+  crittersystem:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2025-07-16T14:36:45.745968692Z"
+    description: A Helm chart for deploying the CritterSystem application
+    digest: de7c114a19b78256d262d5f38af795701563414382b95d172306c5e7443ab567
+    name: crittersystem
+    urls:
+    - https://github.com/eurofurence/helm-charts/releases/download/crittersystem-0.2.2/crittersystem-0.2.2.tgz
+    version: 0.2.2
   mobile-app:
   - apiVersion: v2
     appVersion: v3.6.0
@@ -185,4 +195,4 @@ entries:
     urls:
     - https://github.com/eurofurence/helm-charts/releases/download/mobile-app-0.0.1-beta.2/mobile-app-0.0.1-beta.2.tgz
     version: 0.0.1-beta.2
-generated: "2025-06-29T14:00:17.034339152Z"
+generated: "2025-07-16T14:36:45.746004001Z"
