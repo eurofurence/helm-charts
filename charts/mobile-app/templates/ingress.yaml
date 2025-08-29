@@ -20,7 +20,7 @@ spec:
       http:
         paths:
           # Prevent access to convention-versioned endpoints
-          - path: "/($|[^/]+\\.[^/]*$|\\.well-known/(?:assetlinks.json|apple-app-site-association)|css/.*|fonts/.*|images/.*|scripts/.*|webfonts/.*|qr/.*|qrcode/.*)"
+          - path: "/($|[^/]+\\.[^/]*$|\\.well-known/(?:assetlinks.json|apple-app-site-association)|css/.*|fonts/.*|images/.*|scripts/.*|webfonts/.*|qr/.*|qrcode/.*|wifi)"
             pathType: ImplementationSpecific
             backend:
               service:

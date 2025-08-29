@@ -1,6 +1,6 @@
 apiVersion: v2
 name: mobile-app
-version: 0.0.1
+version: 0.0.2
 description: Backend & backoffice for the Eurofurence mobile app including an optional home page and web-based back office UI.
 keywords:
   - eurofurence
@@ -15,4 +15,4 @@ maintainers:
   - name: Fenrikur
     url: https://github.com/fenrikur
 icon: https://app.eurofurence.org/images/ef-app-logo.png
-appVersion: "v3.6.0"
+appVersion: "v4.4.1"
