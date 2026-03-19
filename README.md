@@ -5,6 +5,7 @@ Simplify deployment of various Eurofurence services on Kubernetes by using the H
 ## Available charts
 
 * [`mobile-app`](./charts/mobile-app/) – Used to run the backend of the [Eurofurence Mobile App](https://app.eurofurence.org)!
+* [`crittersystem`](./charts/crittersystem/) – Deploy the [Eurofurence Crittersystem](https://critter.eurofurence.org)!
 
 ## Usage
 
