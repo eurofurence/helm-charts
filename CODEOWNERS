@@ -1,5 +1,7 @@
-*                    @eurofurence/devops
-charts/crittersystem @eurofurence/ef-critter-system-dev
-charts/mobile-app    @eurofurence/ef-app-dev
-charts/laravel       @eurofurence/fursuit-badges
-charts/laravel       @eurofurence/identity-management
+*                     @eurofurence/devops
+/CODEOWNERS           @fenrikur
+/CODEOWNERS           @RustyBraze
+/charts/crittersystem @eurofurence/ef-critter-system-dev
+/charts/mobile-app    @eurofurence/ef-app-dev
+/charts/laravel       @eurofurence/fursuit-badges
+/charts/laravel       @eurofurence/identity-management
