@@ -1,5 +1,6 @@
 app:
   replicaCount: 1
+  command: ["php", "artisan", "optimize", "&&", "php", "artisan", "octane:start", "--host=0.0.0.0", "--port=80"]
   migrate:
     enabled: true
     seed: false
@@ -78,6 +79,7 @@ infisical:
 
 ingress:
   host: ef-streaming.eurofurence.org
+  pathPrefix: ""  # Set to "/your-app" to host under domain.com/your-app
   annotations: {}
 
 image:
