@@ -1,23 +1,8 @@
-# Eurofurence Helm Charts
+# Eurofurence Helm Charts – GitHub Pages Deployment
 
-Simplify deployment of various Eurofurence services on Kubernetes by using the Helm charts in this repository!
+> Please turn around, nothing to see here…
 
-## Usage
+You are viewing the branch `gh-pages` which is used for GitHub Pages deployments of the Eurofurence Helm Chart repository.
 
-[Helm](https://helm.sh) must be installed to use the charts.
-Please refer to Helm's [documentation](https://helm.sh/docs) to get started.
-
-Once Helm has been set up correctly, add the repo as follows:
-
-  `helm repo add eurofurence https://eurofurence.github.io/helm-charts`
-
-If you had already added this repo earlier, run `helm repo update` to retrieve the latest versions of the packages.
-You can then run `helm search repo eurofurence` to see the charts.
-
-To install the `<chart-name>` chart:
-
-  `helm install my-<chart-name> eurofurence/<chart-name>`
-
-To uninstall the chart:
-
-  `helm uninstall my-<chart-name>`
+Please switch to the `main` branch for the actual Helm Chart code and instructions:
+<https://github.com/eurofurence/helm-charts>
