@@ -10,6 +10,67 @@ entries:
     urls:
     - https://github.com/eurofurence/helm-charts/releases/download/crittersystem-0.2.2/crittersystem-0.2.2.tgz
     version: 0.2.2
+  laravel:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-06-12T23:04:32.15435+02:00"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey-io.github.io/valkey-helm
+      version: 0.9.0
+    description: A Helm chart for Kubernetes
+    digest: 247315ed85fb0217f57d37216b839772d63c9d3512e23f05ff74a7cece79c087
+    name: laravel
+    type: application
+    urls:
+    - laravel-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-06-12T23:04:32.134708+02:00"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.6.2
+    description: A Helm chart for Kubernetes
+    digest: e671dfbe895a6a5b1df00fd66f2b973660079fb3dad089ba423d821601816c5a
+    name: laravel
+    type: application
+    urls:
+    - laravel-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-06-12T23:04:32.109846+02:00"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.6.2
+    description: A Helm chart for Kubernetes
+    digest: 64c1d745d71809c85742bd708f71ebc20f0d7e93fadd39670b62bed6c293ee02
+    name: laravel
+    type: application
+    urls:
+    - laravel-0.2.5.tgz
+    version: 0.2.5
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-06-12T23:04:32.084108+02:00"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.6.2
+    description: A Helm chart for Kubernetes
+    digest: b605e60d3b815de49ec93ffec1654690ada7fee9a9963099bbd08a33e2bcb24c
+    name: laravel
+    type: application
+    urls:
+    - laravel-0.2.4.tgz
+    version: 0.2.4
   mobile-app:
   - apiVersion: v2
     appVersion: v4.4.1
@@ -241,4 +302,4 @@ entries:
     urls:
     - https://github.com/eurofurence/helm-charts/releases/download/mobile-app-0.0.1-beta.2/mobile-app-0.0.1-beta.2.tgz
     version: 0.0.1-beta.2
-generated: "2025-08-29T16:04:20.149369514Z"
+generated: "2026-06-12T23:04:32.189712+02:00"
