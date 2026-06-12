@@ -1,6 +1,7 @@
 app:
   replicaCount: 1
   command: ["php", "artisan", "optimize", "&&", "php", "artisan", "octane:start", "--host=0.0.0.0", "--port=80"]
+  healthEndpoint: "/up"
   migrate:
     enabled: true
     seed: false
@@ -51,14 +52,31 @@ reverb:
       memory: 500Mi
       cpu: 1000m
 
-# bitnami redis!
-redis:
+typesense:
   enabled: false
   replicaCount: 1
+  image:
+    repository: typesense/typesense
+    tag: "27.1"
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 100m
+    limits:
+      memory: 1Gi
+      cpu: 500m
+  storage:
+    size: 10Gi
+    storageClass: ""
+
+# valkey (redis-compatible)
+valkey:
+  enabled: false
   resources:
     requests:
       memory: 500Mi
-      cpu: 0.05
+      cpu: 50m
     limits:
       memory: 2Gi
       cpu: 2
@@ -79,6 +97,10 @@ infisical:
 
 ingress:
   host: ef-streaming.eurofurence.org
+  # Alternative: use hosts for multiple hosts
+  # hosts:
+  #   - ef-streaming.eurofurence.org
+  #   - another-domain.com
   pathPrefix: ""  # Set to "/your-app" to host under domain.com/your-app
   annotations: {}
 
