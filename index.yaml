@@ -10,6 +10,22 @@ entries:
     urls:
     - https://github.com/eurofurence/helm-charts/releases/download/crittersystem-0.2.2/crittersystem-0.2.2.tgz
     version: 0.2.2
+  fursuit-badges:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-06-13T09:38:25.891922611Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey-io.github.io/valkey-helm
+      version: 0.9.0
+    description: A Helm chart for Kubernetes
+    digest: 149a9dcfdccf00ec0b98b586a119380757f040a1979280272cf4f6256949bc92
+    name: fursuit-badges
+    type: application
+    urls:
+    - https://github.com/eurofurence/helm-charts/releases/download/fursuit-badges-0.3.0/fursuit-badges-0.3.0.tgz
+    version: 0.3.0
   laravel:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -302,4 +318,4 @@ entries:
     urls:
     - https://github.com/eurofurence/helm-charts/releases/download/mobile-app-0.0.1-beta.2/mobile-app-0.0.1-beta.2.tgz
     version: 0.0.1-beta.2
-generated: "2026-06-12T23:04:32.189712+02:00"
+generated: "2026-06-13T09:38:25.891953678Z"
