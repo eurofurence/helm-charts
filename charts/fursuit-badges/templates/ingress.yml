@@ -1,0 +1,109 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "laravel.fullname" . }}-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-live
+    nginx.ingress.kubernetes.io/proxy-body-size: 32m
+  labels:
+    name: {{ include "laravel.fullname" . }}-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+{{- if .Values.ingress.hosts }}
+{{- range .Values.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+{{- if $.Values.ingress.pathPrefix }}
+          - pathType: Prefix
+            path: "{{ $.Values.ingress.pathPrefix }}"
+{{- else }}
+          - pathType: Prefix
+            path: "/"
+{{- end }}
+            backend:
+              service:
+                name: {{ include "laravel.fullname" $ }}-app
+                port:
+                  name: http
+{{ if $.Values.reverb.enabled }}
+          # REVERB #################################################
+          - pathType: Prefix
+{{- if $.Values.ingress.pathPrefix }}
+            path: "{{ $.Values.ingress.pathPrefix }}/app"
+{{- else }}
+            path: "/app"
+{{- end }}
+            backend:
+              service:
+                name: {{ include "laravel.fullname" $ }}-reverb
+                port:
+                  name: reverb
+{{- end }}
+          # STORAGE & BUILD ########################################
+          - pathType: Prefix
+{{- if $.Values.ingress.pathPrefix }}
+            path: "{{ $.Values.ingress.pathPrefix }}/storage"
+{{- else }}
+            path: "/storage"
+{{- end }}
+            backend:
+              service:
+                name: {{ include "laravel.fullname" $ }}-caddy
+                port:
+                  name: http-static
+{{- end }}
+{{- else }}
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+{{- if .Values.ingress.pathPrefix }}
+          - pathType: Prefix
+            path: "{{ .Values.ingress.pathPrefix }}"
+{{- else }}
+          - pathType: Prefix
+            path: "/"
+{{- end }}
+            backend:
+              service:
+                name: {{ include "laravel.fullname" . }}-app
+                port:
+                  name: http
+{{ if .Values.reverb.enabled }}
+          # REVERB #################################################
+          - pathType: Prefix
+{{- if .Values.ingress.pathPrefix }}
+            path: "{{ .Values.ingress.pathPrefix }}/app"
+{{- else }}
+            path: "/app"
+{{- end }}
+            backend:
+              service:
+                name: {{ include "laravel.fullname" . }}-reverb
+                port:
+                  name: reverb
+{{- end }}
+          # STORAGE & BUILD ########################################
+          - pathType: Prefix
+{{- if .Values.ingress.pathPrefix }}
+            path: "{{ .Values.ingress.pathPrefix }}/storage"
+{{- else }}
+            path: "/storage"
+{{- end }}
+            backend:
+              service:
+                name: {{ include "laravel.fullname" . }}-caddy
+                port:
+                  name: http-static
+{{- end }}
+  tls:
+    - hosts:
+{{- if .Values.ingress.hosts }}
+{{- range .Values.ingress.hosts }}
+        - {{ . }}
+{{- end }}
+{{- else }}
+        - {{ .Values.ingress.host }}
+{{- end }}
+      secretName: {{ include "laravel.fullname" . }}-certificate
