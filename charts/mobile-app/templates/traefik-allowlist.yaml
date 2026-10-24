@@ -1,0 +1,89 @@
+{{- /*
+Traefik ignores the `limit-whitelist` annotation, so these IPs get their own routes without the rate limit.
+They mirror what Traefik's NGINX provider builds from ingress.yaml: the same paths, the `/$1` rewrite,
+`proxy-body-size` and `whitelist-source-range`.
+*/}}
+{{- $annotations := .Values.ingress.annotations | default dict }}
+{{- $allow := index $annotations "nginx.ingress.kubernetes.io/limit-whitelist" | default "" }}
+{{- if and (eq (.Values.ingress.className | default "nginx") "traefik") $allow }}
+{{- $clientIPs := list }}
+{{- range splitList "," $allow }}
+{{- $clientIPs = append $clientIPs (printf "ClientIP(`%s`)" (trim .)) }}
+{{- end }}
+{{- $bodySize := index $annotations "nginx.ingress.kubernetes.io/proxy-body-size" | default "1m" | toString | lower }}
+{{- if not (regexMatch "^[0-9]+[kmg]?$" $bodySize) }}
+{{- fail (printf "proxy-body-size %q is not supported by traefik-allowlist.yaml" $bodySize) }}
+{{- end }}
+{{- $bodyBytes := regexFind "^[0-9]+" $bodySize | int64 }}
+{{- $unit := trimPrefix (regexFind "^[0-9]+" $bodySize) $bodySize }}
+{{- $bodyBytes = mul $bodyBytes (get (dict "" 1 "k" 1024 "m" 1048576 "g" 1073741824) $unit) }}
+{{- $sourceRange := index $annotations "nginx.ingress.kubernetes.io/whitelist-source-range" | default "" }}
+{{- $paths := include "ef-mobile-app.paths" . | fromYamlArray }}
+{{- if $bodyBytes }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ .Release.Name }}-allowlist-body-size
+  namespace: {{ .Release.Namespace }}
+spec:
+  buffering:
+    maxRequestBodyBytes: {{ $bodyBytes }}
+{{- end }}
+{{- if $sourceRange }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ .Release.Name }}-allowlist-source-range
+  namespace: {{ .Release.Namespace }}
+spec:
+  ipAllowList:
+    sourceRange:
+      {{- range splitList "," $sourceRange }}
+      - {{ trim . | quote }}
+      {{- end }}
+{{- end }}
+{{- range $i, $p := $paths }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $.Release.Name }}-allowlist-rewrite-{{ $i }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  replacePathRegex:
+    regex: {{ printf "(?i)%s" $p.path | quote }}
+    replacement: /$1
+{{- end }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}-allowlist
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  ingressClassName: traefik
+  entryPoints:
+    - websecure
+  routes:
+    {{- range $i, $p := $paths }}
+    - kind: Rule
+      match: {{ printf "Host(`%s`) && PathRegexp(`(?i)^%s`) && (%s)" $.Values.ingress.host $p.path (join " || " $clientIPs) | quote }}
+      middlewares:
+        {{- if $sourceRange }}
+        - name: {{ $.Release.Name }}-allowlist-source-range
+        {{- end }}
+        {{- if $bodyBytes }}
+        - name: {{ $.Release.Name }}-allowlist-body-size
+        {{- end }}
+        - name: {{ $.Release.Name }}-allowlist-rewrite-{{ $i }}
+      services:
+        - name: {{ $p.service }}
+          port: http
+    {{- end }}
+  tls:
+    secretName: {{ .Release.Name }}-certificate
+{{- end }}

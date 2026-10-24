@@ -14,32 +14,17 @@ metadata:
   labels:
     app: {{ .Release.Name }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className | default "nginx" }}
   rules:
     - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
-          # Prevent access to convention-versioned endpoints
-          - path: "/($|[^/]+\\.[^/]*$|\\.well-known/(?:assetlinks.json|apple-app-site-association)|css/.*|fonts/.*|images/.*|scripts/.*|webfonts/.*|qr/.*|qrcode/.*|wifi)"
+          {{- range include "ef-mobile-app.paths" . | fromYamlArray }}
+          - path: {{ .path | quote }}
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ include "ef-mobile-app.deploymentName" ( list $ .Values.mainDeployment ) }}-backend
-                port:
-                  name: http
-          {{- range $key, $value := .Values.deployments }}
-          - path: {{ $value.cid | printf "/%s/backoffice(?:/|$)(.*)" | quote }}
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ include "ef-mobile-app.deploymentName" ( list $ $key ) }}-backoffice
-                port:
-                  name: http
-          - path: {{ $value.cid | printf "/%s(?:/|$)(.*)" | quote }}
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ include "ef-mobile-app.deploymentName" ( list $ $key ) }}-backend
+                name: {{ .service }}
                 port:
                   name: http
           {{- end }}

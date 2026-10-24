@@ -10,6 +10,9 @@ global:
 ingress:
   ## Domain under which the backend will be hosted
   host: app.example.com
+  ## IngressClass of the ingress controller: `nginx` or `traefik`
+  ## (with `traefik`, also set `acme.cert-manager.io/http01-ingress-class: traefik` in `annotations`)
+  className: nginx
   ## (optional) Provide additional annotations for ingress.
   ## (e.g. for `cert-manager.io/cluster-issuer` or `nginx.ingress.kubernetes.io/…`)
   annotations:

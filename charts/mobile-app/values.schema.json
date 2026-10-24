@@ -20,6 +20,9 @@
 				"host": {
 					"type": "string"
 				},
+				"className": {
+					"type": "string"
+				},
 				"annotations": {
 					"anyOf": [
 						{
