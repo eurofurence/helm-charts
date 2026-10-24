@@ -32,3 +32,19 @@ Generate deployment name for resource naming and labelling based on a list with 
 {{- $key := index . 1 -}}
 {{ printf "%s-%s" $global.Release.Name $key }}
 {{- end -}}
+
+{{/*
+Generate the routed paths as a YAML list of `path` and `service`, based on the global Values scope object (`$`).
+Shared by ingress.yaml and traefik-allowlist.yaml so both route the same paths.
+*/}}
+{{- define "ef-mobile-app.paths" -}}
+# Prevent access to convention-versioned endpoints
+- path: '/($|[^/]+\.[^/]*$|\.well-known/(?:assetlinks.json|apple-app-site-association)|css/.*|fonts/.*|images/.*|scripts/.*|webfonts/.*|qr/.*|qrcode/.*|wifi)'
+  service: {{ include "ef-mobile-app.deploymentName" ( list $ $.Values.mainDeployment ) }}-backend
+{{- range $key, $value := $.Values.deployments }}
+- path: {{ $value.cid | printf "/%s/backoffice(?:/|$)(.*)" | squote }}
+  service: {{ include "ef-mobile-app.deploymentName" ( list $ $key ) }}-backoffice
+- path: {{ $value.cid | printf "/%s(?:/|$)(.*)" | squote }}
+  service: {{ include "ef-mobile-app.deploymentName" ( list $ $key ) }}-backend
+{{- end }}
+{{- end -}}
